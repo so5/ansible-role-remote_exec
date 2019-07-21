@@ -1,14 +1,13 @@
 - assert:
     that:
       - remote_exec_remote_root is defined
-      - remote_exec_local_root is defined
       - remote_exec_script is defined
 
 - name: upload files
   synchronize:
     delete: yes
     dest: "{{ remote_exec_remote_root }}"
-    src: "{{ remote_exec_local_root }}/"
+    src: "{{ remote_exec_local_root | default( ansible_env.PWD ) }}/"
     rsync_opts: "{{ remote_exec_push_opts }}"
 
 - name: run script
