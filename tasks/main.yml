@@ -7,6 +7,10 @@
   file:
     path: "{{ remote_exec_remote_root }}"
     state: directory
+
+- name: resolve remote_exec_local_root
+  set_fact:
+    remote_exec_local_root: "{{ remote_exec_local_root | default( playbook_dir ) }}"
     
 - name: upload files
   synchronize:
