@@ -1,0 +1,16 @@
+galaxy_info:
+  role_name: remote_exec
+  author: Naoyuki Sogo
+  description: copy files to remote host, exec script and get results back
+  company: "Long Tail Software LLC"
+  license: MIT
+  min_ansible_version: 1.2
+  platforms:
+    - name: Ubuntu
+      versions:
+        - 16
+  galaxy_tags:
+    - rsync
+    - ssh
+    - shell
+    - script

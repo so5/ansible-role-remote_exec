@@ -1,25 +1,25 @@
 - assert:
     that:
-      - RE_remote_root is defined
-      - RE_local_root is defined
-      - RE_script is defined
+      - remote_exec_remote_root is defined
+      - remote_exec_local_root is defined
+      - remote_exec_script is defined
 
 - name: upload files
   synchronize:
     delete: yes
-    dest: "{{ RE_remote_root }}"
-    src: "{{ RE_local_root }}/"
-    rsync_opts: "{{ RE_push_opts }}"
+    dest: "{{ remote_exec_remote_root }}"
+    src: "{{ remote_exec_local_root }}/"
+    rsync_opts: "{{ remote_exec_push_opts }}"
 
 - name: run script
-  command: "{{ RE_script }}"
+  command: "{{ remote_exec_script }}"
   args:
-    chdir: "{{ RE_remote_work_dir | default( RE_remote_root ) }}"
+    chdir: "{{ remote_exec_remote_work_dir | default( remote_exec_remote_root ) }}"
 
 - name: download results
   synchronize:
     delete: no
-    dest: "{{ RE_local_storage_dir | default( RE_local_root) }}"
-    src: "{{ RE_remote_root }}/"
+    dest: "{{ remote_exec_local_storage_dir | default( remote_exec_local_root) }}"
+    src: "{{ remote_exec_remote_root }}/"
     mode: pull
-    rsync_opts: "{{ RE_pull_opts }}"
+    rsync_opts: "{{ remote_exec_pull_opts }}"

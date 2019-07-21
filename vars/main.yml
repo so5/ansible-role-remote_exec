@@ -1,2 +1,2 @@
-RE_push_opts: []
-RE_pull_opts: []
+remote_exec_push_opts: []
+remote_exec_pull_opts: []
