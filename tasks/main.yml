@@ -2,7 +2,12 @@
     that:
       - remote_exec_remote_root is defined
       - remote_exec_script is defined
-
+      
+- name: create destination directory
+  file:
+    path: "{{ remote_exec_remote_root }}"
+    state: directory
+    
 - name: upload files
   synchronize:
     delete: yes
