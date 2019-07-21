@@ -7,7 +7,7 @@
   synchronize:
     delete: yes
     dest: "{{ remote_exec_remote_root }}"
-    src: "{{ remote_exec_local_root | default( ansible_env.PWD ) }}/"
+    src: "{{ remote_exec_local_root | default( playbook_dir ) }}/"
     rsync_opts: "{{ remote_exec_push_opts }}"
 
 - name: run script
