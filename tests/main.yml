@@ -4,7 +4,7 @@
   vars:
     remote_exec_remote_root: "{{ playbook_dir | dirname}}/remote"
     remote_exec_local_root: "{{ playbook_dir | dirname}}/local"
-    remote_exec_script: "hoge.sh"
+    remote_exec_script: "./hoge.sh"
   
   tasks:
     - include_tasks: fixture.yml

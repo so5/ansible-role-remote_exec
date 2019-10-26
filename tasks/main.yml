@@ -20,7 +20,7 @@
     rsync_opts: "{{ remote_exec_push_opts }}"
 
 - name: run script
-  command: "./{{ remote_exec_script }}"
+  command: "{{ remote_exec_script }}"
   args:
     chdir: "{{ remote_exec_remote_work_dir | default( remote_exec_remote_root ) }}"
   register: script
