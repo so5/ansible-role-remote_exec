@@ -20,15 +20,15 @@
     rsync_opts: "{{ remote_exec_push_opts }}"
 
 - name: run script
-  command: "{{ remote_exec_script }}"
+  command: "./{{ remote_exec_script }}"
   args:
     chdir: "{{ remote_exec_remote_work_dir | default( remote_exec_remote_root ) }}"
   register: script
 
 - name: keep  stdout_lines and stderr_lines in fact
   set_fact:
-    stdout_lines: script.stdout_lines
-    stderr_lines: script.stderr_lines
+    stdout_lines: "{{ script.stdout_lines }}"
+    stderr_lines: "{{ script.stderr_lines }}"
   when: remote_exec_keep_script_outputs
 
 - name: download results

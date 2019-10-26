@@ -1,0 +1,23 @@
+- name: "setup"
+  block:
+    - file:
+        path: "{{ remote_exec_remote_root }}"
+        state: absent
+    - file:
+        path: "{{ remote_exec_local_root }}"
+        state: directory
+    - copy:
+        dest: "{{ remote_exec_local_root }}"
+        src: "{{ playbook_dir }}/hoge.sh"
+        mode: "u+rwx"
+      delegate_to: localhost
+    
+- include_tasks: "{{ test_case }}"
+  
+- name: "tear down"
+  file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    -  "{{ remote_exec_remote_root }}"
+    -  "{{ remote_exec_local_root }}"

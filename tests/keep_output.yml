@@ -1,0 +1,28 @@
+- include_role:
+    name: "../.."
+  vars:
+    remote_exec_keep_script_outputs: True
+  
+- name: "check test output"
+  assert: 
+    that: 
+      - "'hoge' in stdout_lines"
+      - "'hoge_err' in stderr_lines"
+    
+- name: "check remote files"
+  command: "ls {{ remote_exec_remote_root }}"
+  register: remote_files
+  
+- assert:
+    that:
+      - "'hoge' in remote_files.stdout_lines"
+      - "'hoge.sh' in remote_files.stdout_lines"
+    
+- name: "check local files"
+  command: "ls {{ remote_exec_local_root }}"
+  register: local_files
+  
+- assert:
+    that:
+      - "'hoge' in local_files.stdout_lines"
+      - "'hoge.sh' in local_files.stdout_lines"

@@ -1,0 +1,26 @@
+- include_role:
+    name: "../.."
+  
+- name: "check test output"
+  assert: 
+    that: 
+      - "stdout_lines is not defined"
+      - "stderr_lines is not defined"
+    
+- name: "check remote files"
+  command: "ls {{ remote_exec_remote_root }}"
+  register: remote_files
+  
+- assert:
+    that:
+      - "'hoge' in remote_files.stdout_lines"
+      - "'hoge.sh' in remote_files.stdout_lines"
+    
+- name: "check local files"
+  command: "ls {{ remote_exec_local_root }}"
+  register: local_files
+  
+- assert:
+    that:
+      - "'hoge' in local_files.stdout_lines"
+      - "'hoge.sh' in local_files.stdout_lines"

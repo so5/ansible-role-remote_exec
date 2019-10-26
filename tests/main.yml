@@ -1,0 +1,16 @@
+- hosts: localhost
+  gather_facts: no
+  connection: local
+  vars:
+    remote_exec_remote_root: "{{ playbook_dir | dirname}}/remote"
+    remote_exec_local_root: "{{ playbook_dir | dirname}}/local"
+    remote_exec_script: "hoge.sh"
+  
+  tasks:
+    - include_tasks: fixture.yml
+      loop:
+        - default.yml
+        - keep_output.yml
+      loop_control:
+        loop_var: test_case
+    
