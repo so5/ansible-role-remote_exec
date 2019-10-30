@@ -11,6 +11,7 @@
       loop:
         - default.yml
         - keep_output.yml
+        - dry_run.yml
       loop_control:
         loop_var: test_case
     

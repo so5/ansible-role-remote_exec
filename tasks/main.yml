@@ -12,6 +12,10 @@
   set_fact:
     remote_exec_local_root: "{{ remote_exec_local_root | default( playbook_dir ) }}"
     
+- name: resolve remote_exec_local_storage_dir
+  set_fact:
+    remote_exec_local_storage_dir : "{{ remote_exec_local_storage_dir | default( remote_exec_local_root) }}"
+    
 - name: upload files
   synchronize:
     delete: yes
@@ -24,17 +28,24 @@
   args:
     chdir: "{{ remote_exec_remote_work_dir | default( remote_exec_remote_root ) }}"
   register: script
+  when: not remote_exec_dry_run | default(false)
 
 - name: keep  stdout_lines and stderr_lines in fact
   set_fact:
-    stdout_lines: "{{ script.stdout_lines }}"
-    stderr_lines: "{{ script.stderr_lines }}"
+    stdout_lines: "{{ script.stdout_lines | default([]) }}"
+    stderr_lines: "{{ script.stderr_lines | default([]) }}"
   when: remote_exec_keep_script_outputs
 
+- name: make sure local storage directory is exist
+  file:
+    path: "{{ remote_exec_local_storage_dir }}"
+    state: directory
+  delegate_to: localhost
+    
 - name: download results
   synchronize:
     delete: no
-    dest: "{{ remote_exec_local_storage_dir | default( remote_exec_local_root) }}"
+    dest: "{{ remote_exec_local_storage_dir }}"
     src: "{{ remote_exec_remote_root }}/"
     mode: pull
     rsync_opts: "{{ remote_exec_pull_opts }}"
