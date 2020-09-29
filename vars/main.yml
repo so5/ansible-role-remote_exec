@@ -1,3 +1,4 @@
 remote_exec_push_opts: []
 remote_exec_pull_opts: []
 remote_exec_keep_script_outputs: False
+remote_exec_download_results: False

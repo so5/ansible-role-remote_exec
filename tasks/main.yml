@@ -2,7 +2,7 @@
     that:
       - remote_exec_remote_root is defined
       - remote_exec_script is defined
-      
+
 - name: create destination directory
   file:
     path: "{{ remote_exec_remote_root }}"
@@ -11,11 +11,11 @@
 - name: resolve remote_exec_local_root
   set_fact:
     remote_exec_local_root: "{{ remote_exec_local_root | default( playbook_dir ) }}"
-    
+
 - name: resolve remote_exec_local_storage_dir
   set_fact:
     remote_exec_local_storage_dir : "{{ remote_exec_local_storage_dir | default( remote_exec_local_root) }}"
-    
+
 - name: upload files
   synchronize:
     delete: yes
@@ -32,20 +32,23 @@
 
 - name: keep  stdout_lines and stderr_lines in fact
   set_fact:
-    stdout_lines: "{{ script.stdout_lines | default([]) }}"
-    stderr_lines: "{{ script.stderr_lines | default([]) }}"
+    stdout_lines: "{{ remote_exec_script.stdout_lines | default(omit) }}"
+    stderr_lines: "{{ remote_exec_script.stderr_lines | default(omit) }}"
   when: remote_exec_keep_script_outputs
 
-- name: make sure local storage directory is exist
-  file:
-    path: "{{ remote_exec_local_storage_dir }}"
-    state: directory
-  delegate_to: localhost
-    
-- name: download results
-  synchronize:
-    delete: no
-    dest: "{{ remote_exec_local_storage_dir }}"
-    src: "{{ remote_exec_remote_root }}/"
-    mode: pull
-    rsync_opts: "{{ remote_exec_pull_opts }}"
+- name: get results
+  block:
+  - name: make sure local storage directory is exist
+    file:
+      path: "{{ remote_exec_local_storage_dir }}"
+      state: directory
+    delegate_to: localhost
+
+  - name: download results
+    synchronize:
+      delete: no
+      dest: "{{ remote_exec_local_storage_dir }}"
+      src: "{{ remote_exec_remote_root }}/"
+      mode: pull
+      rsync_opts: "{{ remote_exec_pull_opts }}"
+  when: remote_exec_download_results
